@@ -55,17 +55,6 @@ const defaultContactMaterial = new CANNON.ContactMaterial(
 world.addContactMaterial(defaultContactMaterial)
 world.defaultContactMaterial = defaultContactMaterial
 
-//Sphere (We need to create a shape -> Box/Cylinder/Plane/Sphere...)
-const sphereShape = new CANNON.Sphere(0.5)
-//Create the Body with a mass and a position
-const sphereBody = new CANNON.Body(
-{
-    mass: 1,
-    position: new CANNON.Vec3(0, 3, 0),
-    shape: sphereShape,
-})
-sphereBody.applyLocalForce(new CANNON.Vec3(150, 0, 0), new CANNON.Vec3(0, 0, 0))
-world.addBody(sphereBody) // Add the body to the world like you would add something in Three.js to the scene
 
 // Floor
 const floorShape = new CANNON.Plane()
@@ -78,22 +67,6 @@ floorBody.quaternion.setFromAxisAngle(
     Math.PI * 0.5
 )
 world.addBody(floorBody)
-
-/**
- * Test sphere
- */
-const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 32, 32),
-    new THREE.MeshStandardMaterial({
-        metalness: 0.3,
-        roughness: 0.4,
-        envMap: environmentMapTexture,
-        envMapIntensity: 0.5
-    })
-)
-sphere.castShadow = true
-sphere.position.y = 0.5
-scene.add(sphere)
 
 /**
  * Floor
@@ -188,11 +161,7 @@ const tick = () =>
     oldElapsedTime = elapsedTime
 
     // Update physics world
-    sphereBody.applyForce(new CANNON.Vec3(-0.5, 0, 0), sphereBody.position)
-
     world.step(1 / 60, deltaTime, 3) // 1/50 -> to run at 60fps -- 3 -> iterations the world can apply to catch up potential delay
-
-    sphere.position.copy(sphereBody.position)
 
     // Update controls
     controls.update()
