@@ -42,6 +42,21 @@ world.gravity.set(0, 9.82, 0) // Add gravity with gravity property (Vec3 -> same
 
 //Sphere (We need to create a shape -> Box/Cylinder/Plane/Sphere...)
 const sphereShape = new CANNON.Sphere(0.5)
+//Create the Body with a mass and a position
+const sphereBody = new CANNON.Body(
+{
+    mass: 1,
+    position: new CANNON.Vec3(0, 3, 0),
+    shape: sphereShape
+})
+world.addBody(sphereBody) // Add the body to the world like you would add something in Three.js to the scene
+
+// Floor
+const floorShape = new CANNON.Plane()
+const floorBody = new CANNON.Body()
+floorBody.mass = 0
+floorBody.addShape(floorShape)
+world.addBody(floorBody)
 
 /**
  * Test sphere
@@ -143,10 +158,18 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  * Animate
  */
 const clock = new THREE.Clock()
+let oldElapsedTime = 0
 
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+    const deltaTime = elapsedTime - oldElapsedTime
+    oldElapsedTime = elapsedTime
+
+    // Update physics world
+    world.step(1 / 60, deltaTime, 3) // 1/50 -> to run at 60fps -- 3 -> iterations the world can apply to catch up potential delay
+
+    sphere.position.copy(sphereBody.position)
 
     // Update controls
     controls.update()
