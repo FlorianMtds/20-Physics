@@ -152,6 +152,8 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Utils
  */
+const objectsToUpdate = []
+
 const createSphere = (radius, position) =>
 {
     // Three.js mesh
@@ -177,9 +179,17 @@ const createSphere = (radius, position) =>
     })
     body.position.copy(position)
     world.addBody(body)
+
+    // Save in objects update
+    objectsToUpdate.push({
+        mesh,
+        body,
+    })
 }
 
 createSphere(0.5, { x: 0, y: 3, z: 0})
+createSphere(0.5, { x: 2, y: 3, z: 0})
+createSphere(0.5, { x: -2, y: 3, z: 0})
 
 /**
  * Animate
@@ -195,6 +205,11 @@ const tick = () =>
 
     // Update physics world
     world.step(1 / 60, deltaTime, 3) // 1/50 -> to run at 60fps -- 3 -> iterations the world can apply to catch up potential delay
+
+    for(const object of objectsToUpdate)
+    {
+        object.mesh.position.copy(object.body.position)
+    }
 
     // Update controls
     controls.update()
