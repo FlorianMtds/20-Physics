@@ -1,6 +1,10 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import GUI from 'lil-gui'
+// Import de la librarie de physique CANNON
+import CANNON from 'cannon'
+
+console.log(CANNON);
 
 /**
  * Debug
