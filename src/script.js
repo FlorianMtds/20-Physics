@@ -4,8 +4,6 @@ import GUI from 'lil-gui'
 // Import de la librarie de physique CANNON
 import CANNON from 'cannon'
 
-console.log(CANNON);
-
 /**
  * Debug
  */
@@ -34,6 +32,16 @@ const environmentMapTexture = cubeTextureLoader.load([
     '/textures/environmentMaps/0/pz.png',
     '/textures/environmentMaps/0/nz.png'
 ])
+
+/**
+ * Physics
+ */
+// World
+const world = new CANNON.World() // Create a Cannon.js World
+world.gravity.set(0, 9.82, 0) // Add gravity with gravity property (Vec3 -> same as Vector3 in Three.js)
+
+//Sphere (We need to create a shape -> Box/Cylinder/Plane/Sphere...)
+const sphereShape = new CANNON.Sphere(0.5)
 
 /**
  * Test sphere
