@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import GUI from 'lil-gui'
 // Import de la librarie de physique CANNON
 import CANNON from 'cannon'
+import { materialAO, metalness, roughness } from 'three/tsl'
 
 /**
  * Debug
@@ -147,6 +148,38 @@ renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+/**
+ * Utils
+ */
+const createSphere = (radius, position) =>
+{
+    // Three.js mesh
+    const mesh = new THREE.Mesh(
+        new THREE.SphereGeometry(radius, 20, 20),
+        new THREE.MeshStandardMaterial({
+            metalness: 0.3,
+            roughness: 0.4,
+            envMap: environmentMapTexture
+        })
+    )
+    mesh.castShadow = true
+    mesh.position.copy(position)
+    scene.add(mesh)
+
+    // Cannon.js Body
+    const shape = new CANNON.Sphere(radius)
+    const body = new CANNON.Body({
+        mass: 1,
+        position: new CANNON.Vec3(0, 3, 0),
+        shape,
+        material: defaultMaterial
+    })
+    body.position.copy(position)
+    world.addBody(body)
+}
+
+createSphere(0.5, { x: 0, y: 3, z: 0})
 
 /**
  * Animate
