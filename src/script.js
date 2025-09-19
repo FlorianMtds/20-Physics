@@ -41,18 +41,18 @@ const world = new CANNON.World() // Create a Cannon.js World
 world.gravity.set(0, - 9.82, 0) // Add gravity with gravity property (Vec3 -> same as Vector3 in Three.js)
 
 // Materials
-const concretMaterial = new CANNON.Material('concrete')
-const plasticMaterial = new CANNON.Material('plastic')
+const defaultMaterial = new CANNON.Material('default')
 
-const concretePlasticContactMaterial = new CANNON.ContactMaterial(
-    concretMaterial,
-    plasticMaterial,
+
+const defaultContactMaterial = new CANNON.ContactMaterial(
+    defaultMaterial,
+    defaultMaterial,
     {
         friction: 0.1,
         restitution: 0.7,
     }
 )
-world.addContactMaterial(concretePlasticContactMaterial)
+world.addContactMaterial(defaultContactMaterial)
 
 //Sphere (We need to create a shape -> Box/Cylinder/Plane/Sphere...)
 const sphereShape = new CANNON.Sphere(0.5)
@@ -62,14 +62,14 @@ const sphereBody = new CANNON.Body(
     mass: 1,
     position: new CANNON.Vec3(0, 3, 0),
     shape: sphereShape,
-    material: plasticMaterial
+    material: defaultMaterial
 })
 world.addBody(sphereBody) // Add the body to the world like you would add something in Three.js to the scene
 
 // Floor
 const floorShape = new CANNON.Plane()
 const floorBody = new CANNON.Body()
-floorBody.material = concretMaterial
+floorBody.material = defaultMaterial
 floorBody.mass = 0
 floorBody.addShape(floorShape)
 // Rotate the floor with CANNON is only supported with quaternion
