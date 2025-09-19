@@ -53,6 +53,7 @@ const defaultContactMaterial = new CANNON.ContactMaterial(
     }
 )
 world.addContactMaterial(defaultContactMaterial)
+world.defaultContactMaterial = defaultContactMaterial
 
 //Sphere (We need to create a shape -> Box/Cylinder/Plane/Sphere...)
 const sphereShape = new CANNON.Sphere(0.5)
@@ -62,14 +63,13 @@ const sphereBody = new CANNON.Body(
     mass: 1,
     position: new CANNON.Vec3(0, 3, 0),
     shape: sphereShape,
-    material: defaultMaterial
 })
+sphereBody.applyLocalForce(new CANNON.Vec3(150, 0, 0), new CANNON.Vec3(0, 0, 0))
 world.addBody(sphereBody) // Add the body to the world like you would add something in Three.js to the scene
 
 // Floor
 const floorShape = new CANNON.Plane()
 const floorBody = new CANNON.Body()
-floorBody.material = defaultMaterial
 floorBody.mass = 0
 floorBody.addShape(floorShape)
 // Rotate the floor with CANNON is only supported with quaternion
@@ -188,6 +188,8 @@ const tick = () =>
     oldElapsedTime = elapsedTime
 
     // Update physics world
+    sphereBody.applyForce(new CANNON.Vec3(-0.5, 0, 0), sphereBody.position)
+
     world.step(1 / 60, deltaTime, 3) // 1/50 -> to run at 60fps -- 3 -> iterations the world can apply to catch up potential delay
 
     sphere.position.copy(sphereBody.position)
