@@ -216,8 +216,6 @@ const createSphere = (radius, position) =>
     })
 }
 createSphere(0.5, { x: 0, y: 3, z: 0})
-createSphere(0.5, { x: 2, y: 3, z: 0})
-createSphere(0.5, { x: -2, y: 3, z: 0})
 
 // Box
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1)
@@ -253,10 +251,6 @@ const createBox = (width, height, depth, position) =>
         body,
     })
 }
-
-createBox(0.5, 0.5, 0.5, { x: 0, y: 3, z: 0})
-createBox(0.5, 0.5, 0.5, { x: 2, y: 3, z: 0})
-createBox(0.5, 0.5, 0.5, { x: -2, y: 3, z: 0})
 
 /**
  * Animate
