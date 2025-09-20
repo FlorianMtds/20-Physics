@@ -65,6 +65,7 @@ const environmentMapTexture = cubeTextureLoader.load([
  */
 // World
 const world = new CANNON.World() // Create a Cannon.js World
+world.broadphase = new CANNON.SAPBroadphase(world) // Better performances when Bodies collides
 world.gravity.set(0, - 9.82, 0) // Add gravity with gravity property (Vec3 -> same as Vector3 in Three.js)
 
 // Materials
