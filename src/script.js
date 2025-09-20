@@ -46,6 +46,22 @@ const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 
 /**
+ * Sounds
+ */
+const hitSound = new Audio('sounds/hit.mp3')
+const playHitSound = (collision) => 
+{   
+    const impactStrengh = collision.contact.getImpactVelocityAlongNormal()
+
+    if(impactStrengh > 1.5)
+    {
+        hitSound.volume = Math.random()
+        hitSound.currentTime = 0
+        hitSound.play()
+    }
+}
+
+/**
  * Textures
  */
 const textureLoader = new THREE.TextureLoader()
@@ -66,6 +82,7 @@ const environmentMapTexture = cubeTextureLoader.load([
 // World
 const world = new CANNON.World() // Create a Cannon.js World
 world.broadphase = new CANNON.SAPBroadphase(world) // Better performances when Bodies collides
+world.allowSleep = true // Sleep objects when they are not moving so it upgrades performances
 world.gravity.set(0, - 9.82, 0) // Add gravity with gravity property (Vec3 -> same as Vector3 in Three.js)
 
 // Materials
@@ -208,6 +225,7 @@ const createSphere = (radius, position) =>
         material: defaultMaterial
     })
     body.position.copy(position)
+    body.addEventListener('collide', playHitSound)
     world.addBody(body)
 
     // Save in objects update
@@ -244,6 +262,7 @@ const createBox = (width, height, depth, position) =>
         material: defaultMaterial
     })
     body.position.copy(position)
+    body.addEventListener('collide', playHitSound)
     world.addBody(body)
 
     // Save in objects update
